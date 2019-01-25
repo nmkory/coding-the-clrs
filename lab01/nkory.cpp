@@ -1,44 +1,34 @@
 #include <iostream>
-#include <fstream>
 
 using namespace std;
 
-void printArray(int* array, const int count, ofstream& result)
+void printArray(const int* array, const int count)
 {
   for (int i = 0; i < count; i++) {
-    result << array[i] << ";";
+    cout << array[i] << ";";
   }
-  result << endl;
+  cout << endl;
 }
 
 int main(int argc, char* argv[])
 {
-  char c;
   int length;
   int key;
   int i;
-  int j;
   int count = 0;
   int* array;
-  ifstream inf(argv[1]);
-  ofstream result;
 
-  result.open(argv[2]);
-
-  inf >> c;
-  length = c - '0';
+  cin >> length;
   array = new int [length];
 
-  inf >> c;
-  array[0] = (c - '0');
+  cin >> array[0];
   count++;
 
   //for j = 2 to A.length
-  for (j = 1; j < length; j++)
+  for (int j = 1; j < length; j++)
   {
     //key = A[j]
-    inf >> c;
-    key = c - '0';
+    cin >> key;
 
     //i = j - 1
     i = j - 1;
@@ -52,13 +42,11 @@ int main(int argc, char* argv[])
     array[i + 1] = key;
 
     count++;
-    printArray(array, count, result);
+    printArray(array, count);
   }
 
   //Free allocated space
   delete[] array;
-
-  result.close();
 
   return 0;
 }  //main()
