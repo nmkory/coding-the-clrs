@@ -17,6 +17,26 @@ void printArray(const int* array, int length)
 }  //printArray()
 
 
+void merge(int* array, int p, int q, int r)
+{
+  int i;
+  int j;
+  int n1 = q - p + 1;
+  int n2 = r - q;
+  int* lhs = new int [n1 + 1];
+  int* rhs = new int [n2 + 1];
+
+  for (i = 0; i < n1; i++)
+    lhs[i] = array[p + i - 1];
+
+  for (j = 0; j < n2; j++)
+    rhs[j] = array[q + j];
+
+  delete[] lhs;
+  delete[] rhs;
+}  //merge()
+
+
 void mergeSort(int* array, int p, int r)
 {
   if (p < r)
@@ -40,6 +60,9 @@ int main(int argc, char* argv[])
   //load the unsorted array from input
   for (int i = 0; i < length; i++)
     cin >> array[i];
+
+  //start merge sorting
+  mergeSort(array, 0, length - 1);
 
   //print result
   printArray(array, length);
