@@ -1,5 +1,6 @@
 // Author: Nicholas Kory, SID# 100319778, nkory@ucmerced.edu
 // CSE 100 Spring Semester 2019
+#include <limits>
 #include <iostream>
 
 using namespace std;
@@ -8,12 +9,7 @@ void printArray(const int* array, int length)
 {
   //print out the status of the array
   for (int i = 0; i < length; i++)
-  {
     cout << array[i] << ";";
-  }  //array has been printed
-
-  //print a new line per instructions
-  cout << endl;
 }  //printArray()
 
 
@@ -26,11 +22,34 @@ void merge(int* array, int p, int q, int r)
   int* lhs = new int [n1 + 1];
   int* rhs = new int [n2 + 1];
 
+  //adjusted for array starting at 0
   for (i = 0; i < n1; i++)
-    lhs[i] = array[p + i - 1];
+    lhs[i] = array[p + i];
 
+  //adjusted for array starting at 0
   for (j = 0; j < n2; j++)
-    rhs[j] = array[q + j];
+    rhs[j] = array[q + j + 1];
+
+  lhs[n1] = numeric_limits<int>::max();
+  rhs[n2] = numeric_limits<int>::max();
+
+  i = 0;
+  j = 0;
+
+  for (int k = p; k <= r; k++)
+  {
+    if (lhs[i] <= rhs[j])
+    {
+      array[k] = lhs[i];
+      i++;
+    }
+
+    else
+    {
+      array[k] = rhs[j];
+      j++;
+    }
+  }
 
   delete[] lhs;
   delete[] rhs;
@@ -41,9 +60,10 @@ void mergeSort(int* array, int p, int r)
 {
   if (p < r)
   {
-    int q = ((p + r)/2);
+    int q = ((p + r) / 2);
     mergeSort(array, p, q);
     mergeSort(array, q + 1, r);
+    merge(array, p, q, r);
   }
 }  //mergeSort()
 
