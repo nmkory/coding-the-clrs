@@ -1,77 +1,90 @@
 // Author: Nicholas Kory, SID# 100319778, nkory@ucmerced.edu
 // CSE 100 Spring Semester 2019
 #include <iostream>
+#include <tuple>
 
 using namespace std;
 
-void printArray(const int32_t* array, int length)
+//returns tuple <index for max left, index for max right, sum max cross array>
+tuple <int,int,int32_t> findMaxCrossingSubarray(int32_t* array, int low,
+                                                int mid, int high)
 {
-  //print out the status of the array
-  for (int i = 0; i < length; i++)
-    cout << array[i] << ";";
-}  //printArray()
+  int max_left = mid;
+  int max_right = mid;
+  int32_t left_sum = INT32_MIN;
+  int32_t right_sum = INT32_MIN;
+  int32_t sum = 0;
 
-
-void merge(int32_t* array, int p, int q, int r)
-{
-  int i;
-  int j;
-  int n1 = q - p + 1;  //size of rhs subarray
-  int n2 = r - q;  ///size of lhs subarray
-  int32_t* lhs = new int32_t [n1 + 1];  //add one for max value in last ele
-  int32_t* rhs = new int32_t [n2 + 1];  //add one for max value in last ele
-
-  //adjusted for array starting at 0, copy main array into temp subarray
-  for (i = 0; i < n1; i++)
-    lhs[i] = array[p + i];
-
-  //adjusted for array starting at 0, copy main array into temp subarray
-  for (j = 0; j < n2; j++)
-    rhs[j] = array[q + j + 1];
-
-  //last element of subarray should have infinite value so loops below work
-  lhs[n1] = INT32_MAX;
-  rhs[n2] = INT32_MAX;
-
-  //reset indicies
-  i = 0;
-  j = 0;
-
-  //for each element of left most pos of this subarray to right most pos
-  for (int k = p; k <= r; k++)
+  //find sum for left part of cross
+  for (int i = mid; i >= low; i--)
   {
-    //if the lhs sub element is less than or equal to right, sort it into main
-    if (lhs[i] <= rhs[j])
-    {
-      array[k] = lhs[i];
-      i++;
-    }  //lhs is sorted into main sub
+    //track running left sum
+    sum = sum + array[i];
 
-    //else rhs sub element is less than left, sort it into main
+    //if the new sum is greater than old, update with value and index
+    if (sum > left_sum)
+    {
+      left_sum = sum;
+      max_left = i;
+    }  //left value and index updated
+  } //the left sum and index have been found
+
+  //reset sum
+  sum = 0;
+
+  //find sum for right part of cross
+  for (int j = mid + 1; j <= high; j++)
+  {
+    //track running right sum
+    sum = sum + array[j];
+
+    //if the new sum is greater than old, update with value and index
+    if (sum > right_sum)
+    {
+      right_sum = sum;
+      max_right = j;
+    }  //right value and index updated
+  } //the right sum and index have been found
+
+  //add the left and right for total value
+  return (make_tuple (max_left, max_right, left_sum + right_sum));
+}  //findMaxCrossingSubarray()
+
+
+//returns tuple <index for max left, index for max right, sum max subarray>
+tuple <int,int,int32_t> findMaximumSubarray(int32_t* array, int low, int high)
+{
+  //base case: only one element, return the value of that one element
+  if (high == low)
+    return (make_tuple (low, high, array[low]));
+
+  //need to recurse down and check the cross subarray for this array
+  else
+  {
+    int mid = ((low + high) / 2);
+
+    tuple <int, int, int32_t> left =
+      findMaximumSubarray(array, low, mid);
+
+    tuple <int, int, int32_t> right =
+      findMaximumSubarray(array, mid + 1, high);
+
+    tuple <int32_t, int32_t, int32_t> cross =
+      findMaxCrossingSubarray(array, low, mid, high);
+
+    //if the left-hand side has the greatest sum
+    if (get<2>(left) >= get<2>(right) && get<2>(left) >= get<2>(cross))
+      return left;
+
+    //else if the right-hand side has the greatest sum
+    else if (get<2>(right) >= get<2>(left) && get<2>(right) >= get<2>(cross))
+      return right;
+
+    //else it must be the max cross subarray
     else
-    {
-      array[k] = rhs[j];
-      j++;
-    }  //rhs is sorted into main sub
-  }  //end of for loop means subarrays are sorted back into main array
-
-  //free allocated space
-  delete[] lhs;
-  delete[] rhs;
-}  //merge()
-
-
-void mergeSort(int32_t* array, int p, int r)
-{
-  //if there is more than one element in each subarray
-  if (p < r)
-  {
-    int q = ((p + r) / 2);
-    mergeSort(array, p, q);
-    mergeSort(array, q + 1, r);
-    merge(array, p, q, r);
-  }  //else we have reached base case (1 ele in subarray) so do nothing
-}  //mergeSort()
+      return cross;
+  }  //end of recursions and checking subarray
+}  //findMaximumSubarray()
 
 
 int main(int argc, char* argv[])
@@ -83,15 +96,15 @@ int main(int argc, char* argv[])
   cin >> length;
   array = new int32_t [length];
 
-  //load the unsorted array from input
+  //load the array of deltas from input, do not sort
   for (int i = 0; i < length; i++)
     cin >> array[i];
 
-  //start merge sorting
-  mergeSort(array, 0, length - 1);
+  //divide and conquer for max subarray indicies and value
+  tuple <int, int, int32_t> maxSubarray =
+    findMaximumSubarray(array, 0, length - 1);
 
-  //print result
-  printArray(array, length);
+  cout << get<2>(maxSubarray);
 
   //free allocated space
   delete[] array;
