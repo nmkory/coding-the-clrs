@@ -18,7 +18,7 @@ int partition(int* array, int p, int r)
   int i = p - 1;
   int temp;
 
-  for (int j = p; p < r; p--)
+  for (int j = p; j < r; j++)
   {
     if (array[j] <= x)
     {
