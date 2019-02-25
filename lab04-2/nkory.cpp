@@ -12,15 +12,39 @@ void printArray(const int* array, int length)
 }  //printArray()
 
 
-void partition(int* array)
+int partition(int* array, int p, int r)
 {
-  //[TODO]
+  int x = array[r];
+  int i = p - 1;
+  int temp;
+
+  for (int j = p; p < r; p--)
+  {
+    if (array[j] <= x)
+    {
+      i++;
+      temp = array[i];
+      array[i] = array[j];
+      array[j] = temp;
+    }
+  }
+
+  temp = array[i + 1];
+  array[i + 1] = array[r];
+  array[r] = temp;
+
+  return (i + 1);
 }  //partition()
 
 
-void quicksort(int* array, int length)
+void quicksort(int* array, int p, int r)
 {
-  //[TODO]
+  if (p < r)
+  {
+    int q = partition(array, p, r);
+    quicksort(array, p, q - 1);
+    quicksort(array, q + 1, r);
+  }
 }  //quicksort()
 
 
@@ -37,8 +61,8 @@ int main(int argc, char* argv[])
   for (int i = 0; i < length; i++)
     cin >> array[i];
 
-  //build the max heap
-  quicksort(array, length);
+  //sort the array
+  quicksort(array, 0, length - 1);
 
   //print result
   printArray(array, length);
