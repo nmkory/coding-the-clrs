@@ -15,10 +15,9 @@ void printArray(const int* array, int length)
 
 int partition(int* array, int p, int r)
 {
-  //pivot is set to rightmost element
-  int x = array[r];
-  int i = p - 1;
-  int temp;
+  int x = array[r];  //pivot is set to rightmost element
+  int i = p - 1;  //i is set to just left of array start
+  int temp;  //temp variable for inplace swapping
 
   for (int j = p; j < r; j++)
   {
@@ -62,10 +61,11 @@ void randomizedQuicksort(int* array, int p, int r)
   //if we are not at base case
   if (p < r)
   {
+    //call randomized paritioning then recurse down unsorted areas
     int q = randomizedPartition(array, p, r);
     randomizedQuicksort(array, p, q - 1);
     randomizedQuicksort(array, q + 1, r);
-  }
+  }  //q index is now sorted
 }  //randomizedQuicksort()
 
 
