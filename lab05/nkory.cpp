@@ -2,37 +2,14 @@
 // CSE 100 Spring Semester 2019
 #include <iostream>
 #include <vector>
-#include <string>
 
 using namespace std;
 
-void printArray(const int* array, int count)
+void loadArray(vector<int>* array, int length)
 {
-  //print out the status of the array
-  for (int i = 0; i < count; i++)
-  {
-    cout << array[i] << ";";
-  }  //array has been printed
-
-  //print a new line per instructions
-  cout << endl;
-}  //printArray()
-
-
-int main(int argc, char* argv[])
-{
-  int length;
-  int key;
-  int i;
   int j;
   int k;
-  int count = 0;
-  vector<int>* array;
   int temp;
-
-  //first cin is the length of the array to be sorted
-  cin >> length;
-  array = new vector<int> [length];
 
   for (j = 0; j < length; j++)
   {
@@ -42,6 +19,37 @@ int main(int argc, char* argv[])
       array[j].push_back(temp);
     }
   }
+}  //loadArray()
+
+
+void printArray(vector<int>* array, int length)
+{
+  for (int j = 0; j < length; j++)
+  {
+    for (vector<int>::iterator it = array[j].begin(); it != array[j].end();
+         ++it)
+      cout << *it << ";";
+
+    cout << endl;
+  }
+}  //printArray()
+
+
+int main(int argc, char* argv[])
+{
+  int length;
+  int key;
+  int i;
+  int count = 0;
+  vector<int>* array;
+
+  //first cin is the length of the array to be sorted
+  cin >> length;
+  array = new vector<int> [length];
+
+
+  loadArray(array, length);
+
 
   // //for each additional element to be received
   // for (int j = 1; j < length; j++)
@@ -68,13 +76,7 @@ int main(int argc, char* argv[])
   //   printArray(array, count);
   // }  //end of insertion sort, all elements have been read and printed
 
-  for (j = 0; j < length; j++)
-  {
-    for (vector<int>::iterator it = array[j].begin(); it != array[j].end(); ++it)
-      cout << *it << ";";
-
-    cout << endl;
-  }
+  printArray(array, length);
 
   //free allocated space
   delete[] array;
