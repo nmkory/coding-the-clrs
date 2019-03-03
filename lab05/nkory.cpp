@@ -1,7 +1,6 @@
 // Author: Nicholas Kory, SID# 100319778, nkory@ucmerced.edu
 // CSE 100 Spring Semester 2019
 #include <iostream>
-#include <cstring>
 
 using namespace std;
 
@@ -42,7 +41,8 @@ void countingSort(int** array, int** temp_array, int radix_digit, int length)
   int j;
   int count_array[10];
 
-  memset(count_array, -1, sizeof(count_array));
+  for (i = 0; i < 10; i++)
+    count_array[i] = 0;
 
   for (j = 0; j < length; j++)
     count_array[array[j][radix_digit]]++;
@@ -52,15 +52,12 @@ void countingSort(int** array, int** temp_array, int radix_digit, int length)
 
   for (j = length - 1; j >= 0; j--)
   {
-    temp_array[count_array[array[j][radix_digit]]] = array[j];
+    temp_array[count_array[array[j][radix_digit]] - 1] = array[j];
     count_array[array[j][radix_digit]]--;
   }
 
-  printArray(temp_array, length);
-
-  // for (j = 0; j < length; j++)
-  //   array[j] = temp_array[j];
-
+  for (i = 0; i < length; i++)
+    array[i] = temp_array[i];
 }  //countingSort()
 
 
@@ -69,7 +66,6 @@ int main(int argc, char* argv[])
   int length;
   int key;
   int radix_digit;
-  int count = 0;
   int** array;
   int** temp_array;
 
@@ -80,9 +76,9 @@ int main(int argc, char* argv[])
 
   temp_array = new int* [length];
 
-  //radix sort
-  //for(radix_digit = 9; radix_digit >=0; radix_digit--)
-    countingSort(array, temp_array, 9, length);
+  //radix sort using countingSort
+  for(radix_digit = 9; radix_digit >=0; radix_digit--)
+    countingSort(array, temp_array, radix_digit, length);
 
   printArray(array, length);
 
