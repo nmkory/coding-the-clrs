@@ -20,20 +20,19 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
+  bool incoming_input = true;
   int m;
-  char c;
+  char command;
   int value;
-  //int i;
-  //int count = 0;
   list<int>* hash_table;
 
-  //first cin is the length of the array to be sorted
+  //first cin is the length of the hash table
   cin >> m;
   hash_table = new list<int> [m];
 
-  while(true) {
-    cin >> c;
-    switch (c) {
+  while (incoming_input) {
+    cin >> command;
+    switch (command) {
       case 'i':
         cin >> value;
         std::cout << "Insert " << value << '\n';
@@ -47,45 +46,13 @@ int main(int argc, char* argv[])
         std::cout << "Search " << value << '\n';
         break;
       case 'o':
-        //cin >> value;
         std::cout << "Output all" << '\n';
         break;
       case 'e' :
-        return 0;
+        incoming_input = false;
+      default :
+        incoming_input = false;
     }
   }
-
-  //start of insertion sort, insert first element into the array
-  //cin >> array[0];
-  //count++;
-  //
-  // //for each additional element to be received
-  // for (int j = 1; j < length; j++)
-  // {
-  //   //take in the next element
-  //   cin >> key;
-  //
-  //   //set i to the right most part of the sorted array
-  //   i = j - 1;
-  //
-  //   //while we have not reached the end of the array and our new ele is smaller
-  //   while (i >= 0 && array[i] > key)
-  //   {
-  //     //move the element back one position and start while loop over
-  //     array[i + 1] = array[i];
-  //     i--;
-  //   }  //end of while loop means we found location for new element
-  //
-  //   //insert the element
-  //   array[i + 1] = key;
-  //
-  //   //increment the count and print out the status of the array
-  //   count++;
-  //   printArray(array, count);
-  // }  //end of insertion sort, all elements have been read and printed
-  //
-  // //free allocated space
-  // delete[] array;
-  //
-  // return 0;
+   return 0;
 }  //main()
