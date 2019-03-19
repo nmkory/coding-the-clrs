@@ -5,33 +5,37 @@
 
 using namespace std;
 
-// void printArray(const int* array, int count)
-// {
-//   //print out the status of the array
-//   for (int i = 0; i < count; i++)
-//   {
-//     cout << array[i] << ";";
-//   }  //array has been printed
-//
-//   //print a new line per instructions
-//   cout << endl;
-// }  //printArray()
+void output(list<int>** const hash_table, int m)
+{
+  int i;
+  list<int>::iterator it;
+
+  for (i = 0; i < m; i++) {
+    cout << i << ":";
+
+    for (it = hash_table[i]->begin(); it != hash_table[i]->end(); it++)
+      cout << *it << "->";
+
+    cout << ";" << '\n';
+  }
+}  //output()
+
 
 int hashFunction (int k, int m)
 {
   return (k % m);
-}
+}  //hashFunction ()
 
 
 int main(int argc, char* argv[])
 {
-  bool incoming_input = true;
   int m;
   char command;
   int value;
   list<int>** hash_table;
+  bool incoming_input = true;
 
-  //first cin is the length of the hash table
+  //first cin is the length of the hash table and create table and linked lists
   cin >> m;
   hash_table = new list<int>* [m];
   for (int i = 0; i < m; i++)
@@ -42,32 +46,33 @@ int main(int argc, char* argv[])
     switch (command) {
       case 'i':
         cin >> value;
-        std::cout << "Insert " << value << '\n';
+        cout << "Insert " << value << '\n';
         hash_table[hashFunction(value, m)]->emplace_front(value);
         break;
       case 'd':
         cin >> value;
-        std::cout << "Delete " << value << '\n';
+        cout << "Delete " << value << '\n';
         break;
       case 's':
         cin >> value;
-        std::cout << "Search " << value << '\n';
+        cout << "Search " << value << '\n';
         break;
       case 'o':
-        std::cout << "Output all" << '\n';
-        for (int i = 0; i < m; i++) {
-          cout << i << ":";
-          for (list<int>::iterator it = hash_table[i]->begin(); it != hash_table[i]->end(); ++it) {
-            cout << *it << "->";
-          }
-          cout << ";" << '\n';
-        }
+        cout << "Output all" << '\n';
+        output(hash_table, m);
         break;
       case 'e' :
         incoming_input = false;
+        break;
       default :
         incoming_input = false;
     }
   }
+
+  //free allocated space
+  for (int j = 0; j < m; j++)
+    delete hash_table[j];
+  delete[] hash_table;
+
    return 0;
 }  //main()
