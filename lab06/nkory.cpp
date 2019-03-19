@@ -92,21 +92,17 @@ int main(int argc, char* argv[])
     switch (command) {
       case 'i':
         cin >> key;
-        //cout << "Insert " << key << '\n';
         insertKey(hash_table, m, key);
         break;
       case 'd':
         cin >> key;
-        //cout << "Delete " << key << '\n';
         deleteKey(hash_table, m, key);
         break;
       case 's':
         cin >> key;
-        //cout << "Search " << key << '\n';
         searchKey(hash_table, m, key);
         break;
       case 'o':
-        //cout << "Output all" << '\n';
         output(hash_table, m);
         break;
       case 'e' :
