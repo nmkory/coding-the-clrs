@@ -17,6 +17,11 @@ using namespace std;
 //   cout << endl;
 // }  //printArray()
 
+int hashFunction (int k, int m)
+{
+  return (k % m);
+}
+
 
 int main(int argc, char* argv[])
 {
@@ -24,11 +29,13 @@ int main(int argc, char* argv[])
   int m;
   char command;
   int value;
-  list<int>* hash_table;
+  list<int>** hash_table;
 
   //first cin is the length of the hash table
   cin >> m;
-  hash_table = new list<int> [m];
+  hash_table = new list<int>* [m];
+  for (int i = 0; i < m; i++)
+    hash_table[i] = new list<int>;
 
   while (incoming_input) {
     cin >> command;
@@ -36,6 +43,7 @@ int main(int argc, char* argv[])
       case 'i':
         cin >> value;
         std::cout << "Insert " << value << '\n';
+        hash_table[hashFunction(value, m)]->emplace_front(value);
         break;
       case 'd':
         cin >> value;
@@ -47,6 +55,13 @@ int main(int argc, char* argv[])
         break;
       case 'o':
         std::cout << "Output all" << '\n';
+        for (int i = 0; i < m; i++) {
+          cout << i << ":";
+          for (list<int>::iterator it = hash_table[i]->begin(); it != hash_table[i]->end(); ++it) {
+            cout << *it << "->";
+          }
+          cout << ";" << '\n';
+        }
         break;
       case 'e' :
         incoming_input = false;
