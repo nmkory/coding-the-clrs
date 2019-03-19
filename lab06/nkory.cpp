@@ -17,10 +17,44 @@ void insertKey(list<int>** hash_table, int m, int key)
 }  //insertKey()
 
 
+void searchKey(list<int>** hash_table, int m, int key)
+{
+  int i = hashFunction(key, m);
+  int j = 0;
+  list<int>::iterator it;
+
+  cout << key << ":";
+
+  for (it = hash_table[i]->begin(); it != hash_table[i]->end(); it++, j++) {
+    if (key == *it)
+    {
+      cout << "FOUND_AT" << i << "," << j << ";" << '\n';
+      return;
+    }
+  }
+
+  cout << "NOT_FOUND;" << '\n';
+}  //deleteKey()
+
+
 void deleteKey(list<int>** hash_table, int m, int key)
 {
-  
-}  //insertKey()
+  int i = hashFunction(key, m);
+  list<int>::iterator it;
+
+  cout << key << ":";
+
+  for (it = hash_table[i]->begin(); it != hash_table[i]->end(); it++) {
+    if (key == *it)
+    {
+      hash_table[i]->erase(it);
+      cout << "DELETED;" << '\n';
+      return;
+    }
+  }
+
+  cout << "DELETE_FAILED;" << '\n';
+}  //deleteKey()
 
 
 void output(list<int>** const hash_table, int m)
@@ -58,20 +92,21 @@ int main(int argc, char* argv[])
     switch (command) {
       case 'i':
         cin >> key;
-        cout << "Insert " << key << '\n';
+        //cout << "Insert " << key << '\n';
         insertKey(hash_table, m, key);
         break;
       case 'd':
         cin >> key;
-        cout << "Delete " << key << '\n';
-        //deleteKey(hash_table, m, key);
+        //cout << "Delete " << key << '\n';
+        deleteKey(hash_table, m, key);
         break;
       case 's':
         cin >> key;
-        cout << "Search " << key << '\n';
+        //cout << "Search " << key << '\n';
+        searchKey(hash_table, m, key);
         break;
       case 'o':
-        cout << "Output all" << '\n';
+        //cout << "Output all" << '\n';
         output(hash_table, m);
         break;
       case 'e' :
