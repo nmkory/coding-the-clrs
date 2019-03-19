@@ -5,6 +5,24 @@
 
 using namespace std;
 
+int hashFunction (int k, int m)
+{
+  return (k % m);
+}  //hashFunction ()
+
+
+void insertKey(list<int>** hash_table, int m, int key)
+{
+  hash_table[hashFunction(key, m)]->emplace_front(key);
+}  //insertKey()
+
+
+void deleteKey(list<int>** hash_table, int m, int key)
+{
+  
+}  //insertKey()
+
+
 void output(list<int>** const hash_table, int m)
 {
   int i;
@@ -21,17 +39,11 @@ void output(list<int>** const hash_table, int m)
 }  //output()
 
 
-int hashFunction (int k, int m)
-{
-  return (k % m);
-}  //hashFunction ()
-
-
 int main(int argc, char* argv[])
 {
   int m;
   char command;
-  int value;
+  int key;
   list<int>** hash_table;
   bool incoming_input = true;
 
@@ -45,17 +57,18 @@ int main(int argc, char* argv[])
     cin >> command;
     switch (command) {
       case 'i':
-        cin >> value;
-        cout << "Insert " << value << '\n';
-        hash_table[hashFunction(value, m)]->emplace_front(value);
+        cin >> key;
+        cout << "Insert " << key << '\n';
+        insertKey(hash_table, m, key);
         break;
       case 'd':
-        cin >> value;
-        cout << "Delete " << value << '\n';
+        cin >> key;
+        cout << "Delete " << key << '\n';
+        //deleteKey(hash_table, m, key);
         break;
       case 's':
-        cin >> value;
-        cout << "Search " << value << '\n';
+        cin >> key;
+        cout << "Search " << key << '\n';
         break;
       case 'o':
         cout << "Output all" << '\n';
