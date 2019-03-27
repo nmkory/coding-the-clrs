@@ -76,25 +76,57 @@ void mergeSort(int32_t* array, int p, int r)
 
 int main(int argc, char* argv[])
 {
-  int length;
-  int32_t* array;
+  int32_t length;
+  int32_t i;
+  int32_t j;
+  int32_t q;
+  int32_t n;
+  int32_t* p;
+  int32_t* r;
+  int32_t* s;
+
 
   //first cin is the length of the array to be sorted
   cin >> length;
-  array = new int32_t [length];
+  n = length;
+  p = new int32_t [length + 1];
+  r = new int32_t [length + 1];
+  s = new int32_t [length + 1];
 
   //load the unsorted array from input
-  for (int i = 0; i < length; i++)
-    cin >> array[i];
+  for (i = 1; i <= length; i++)
+    cin >> p[i];
 
-  //start merge sorting
-  mergeSort(array, 0, length - 1);
+  r[0] = 0;
 
-  //print result
-  printArray(array, length);
+  for (j = 1; j <= length; j++)
+  {
+    q = INT32_MIN;
+    for (i = 1; i <= j; i++)
+    {
+      if (q < p[i] + r[j - i])
+      {
+        q = p[i] + r[j - i];
+        s[j] = i;
+      }  //end of if
+    }  //end of inner for
+    r[j] = q;
+  }
+
+  std::cout << r[n] << '\n';
+
+  while (n > 0)
+  {
+    cout << s[n] << ' ';
+    n = n - s[n];
+  }
+
+  std::cout << "-1" << '\n';
 
   //free allocated space
-  delete[] array;
+  delete[] p;
+  delete[] r;
+  delete[] s;
 
   return 0;
 }  //main()
