@@ -4,129 +4,83 @@
 
 using namespace std;
 
-void printArray(const int32_t* array, int length)
+void printCutRodSolution(const int32_t* revenue_table,
+                         const int32_t* size_table, int32_t n)
 {
-  //print out the status of the array
-  for (int i = 0; i < length; i++)
-    cout << array[i] << ";";
-}  //printArray()
+  //print out the revenue of our size
+  cout << revenue_table[n] << '\n';
 
-
-void merge(int32_t* array, int p, int q, int r)
-{
-  int i;
-  int j;
-  int n1 = q - p + 1;  //size of rhs subarray
-  int n2 = r - q;  ///size of lhs subarray
-  int32_t* lhs = new int32_t [n1 + 1];  //add one for max value in last ele
-  int32_t* rhs = new int32_t [n2 + 1];  //add one for max value in last ele
-
-  //adjusted for array starting at 0, copy main array into temp subarray
-  for (i = 0; i < n1; i++)
-    lhs[i] = array[p + i];
-
-  //adjusted for array starting at 0, copy main array into temp subarray
-  for (j = 0; j < n2; j++)
-    rhs[j] = array[q + j + 1];
-
-  //last element of subarray should have infinite value so loops below work
-  lhs[n1] = INT32_MAX;
-  rhs[n2] = INT32_MAX;
-
-  //reset indicies
-  i = 0;
-  j = 0;
-
-  //for each element of left most pos of this subarray to right most pos
-  for (int k = p; k <= r; k++)
+  //for our value, print out the optimal rod sizes and reduce by n
+  while (n > 0)
   {
-    //if the lhs sub element is less than or equal to right, sort it into main
-    if (lhs[i] <= rhs[j])
-    {
-      array[k] = lhs[i];
-      i++;
-    }  //lhs is sorted into main sub
+    cout << size_table[n] << ' ';
+    n = n - size_table[n];
+  }
 
-    //else rhs sub element is less than left, sort it into main
-    else
-    {
-      array[k] = rhs[j];
-      j++;
-    }  //rhs is sorted into main sub
-  }  //end of for loop means subarrays are sorted back into main array
-
-  //free allocated space
-  delete[] lhs;
-  delete[] rhs;
-}  //merge()
+  //print out sentinel value to note end
+  cout << "-1" << '\n';
+}  //printCutRodSolution()
 
 
-void mergeSort(int32_t* array, int p, int r)
+void extendedBottomUpCutRod(int32_t* price_table, int32_t* revenue_table,
+                            int32_t* size_table, const int32_t length)
 {
-  //if there is more than one element in each subarray
-  if (p < r)
+  int32_t i;
+  int32_t j;
+  int32_t q;  //temp max revenue
+
+  //set revenue for length of 0
+  revenue_table[0] = 0;
+
+  //for length of rod, determine the first cut and revenue
+  for (j = 1; j <= length; j++)
   {
-    int q = ((p + r) / 2);
-    mergeSort(array, p, q);
-    mergeSort(array, q + 1, r);
-    merge(array, p, q, r);
-  }  //else we have reached base case (1 ele in subarray) so do nothing
-}  //mergeSort()
+    //set or reset q to sentinel value
+    q = INT32_MIN;
+
+    //for each piece up to current length
+    for (i = 1; i <= j; i++)
+    {
+      //set q based on stored values in revenue table and update size table
+      if (q < price_table[i] + revenue_table[j - i])
+      {
+        q = price_table[i] + revenue_table[j - i];
+        size_table[j] = i;
+      }  //if entered, stored values were updated
+    }  //after for loop, all the values for up to this length are updated
+
+    //update the revenue table with the new max revenue
+    revenue_table[j] = q;
+  } //after for loop, optimal revenue and sizes are stored in their tables
+}  //extendedBottomUpCutRod()
 
 
 int main(int argc, char* argv[])
 {
   int32_t length;
   int32_t i;
-  int32_t j;
-  int32_t q;
-  int32_t n;
-  int32_t* p;
-  int32_t* r;
-  int32_t* s;
+  int32_t* price_table;
+  int32_t* revenue_table;
+  int32_t* size_table;
 
-
-  //first cin is the length of the array to be sorted
+  //first cin is the length of the arrays
   cin >> length;
-  n = length;
-  p = new int32_t [length + 1];
-  r = new int32_t [length + 1];
-  s = new int32_t [length + 1];
+  price_table = new int32_t [length + 1];
+  revenue_table = new int32_t [length + 1];
+  size_table = new int32_t [length + 1];
 
   //load the unsorted array from input
   for (i = 1; i <= length; i++)
-    cin >> p[i];
+    cin >> price_table[i];
 
-  r[0] = 0;
+  extendedBottomUpCutRod(price_table, revenue_table, size_table, length);
 
-  for (j = 1; j <= length; j++)
-  {
-    q = INT32_MIN;
-    for (i = 1; i <= j; i++)
-    {
-      if (q < p[i] + r[j - i])
-      {
-        q = p[i] + r[j - i];
-        s[j] = i;
-      }  //end of if
-    }  //end of inner for
-    r[j] = q;
-  }
-
-  std::cout << r[n] << '\n';
-
-  while (n > 0)
-  {
-    cout << s[n] << ' ';
-    n = n - s[n];
-  }
-
-  std::cout << "-1" << '\n';
+  printCutRodSolution(revenue_table, size_table, length);
 
   //free allocated space
-  delete[] p;
-  delete[] r;
-  delete[] s;
+  delete[] price_table;
+  delete[] revenue_table;
+  delete[] size_table;
 
   return 0;
 }  //main()
