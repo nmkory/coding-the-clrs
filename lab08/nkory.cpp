@@ -8,7 +8,7 @@ void printOptimalParens(int32_t** s, int32_t i, int32_t j)
 {
   if (i == j)
   {
-    std::cout << "A" << i;
+    std::cout << "A" << i-1;
   }
 
   else
@@ -33,11 +33,12 @@ int main(int argc, char* argv[])
 
   //first cin is the amount of matrix and dimensions
   cin >> n;
+
   p = new int32_t [n + 1];
   for (int32_t i = 0; i <= n; i++)
     cin >> p[i];
 
-  n--;
+  n;
 
   m = new int32_t* [n + 1];
   for (int32_t i = 0; i <= n; i++)
@@ -80,7 +81,7 @@ int main(int argc, char* argv[])
 
   printOptimalParens(s, 1, n);
 
-  std::cout << "NO SEGFAULT" << '\n';
+  std::cout << '\n';
 
   return 0;
 }  //main()
