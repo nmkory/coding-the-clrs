@@ -4,83 +4,83 @@
 
 using namespace std;
 
-void printCutRodSolution(const int32_t* revenue_table,
-                         const int32_t* size_table, int32_t n)
+void printOptimalParens(int32_t** s, int32_t i, int32_t j)
 {
-  //print out the revenue of our size
-  cout << revenue_table[n] << '\n';
-
-  //for our value, print out the optimal rod sizes and reduce by n
-  while (n > 0)
+  if (i == j)
   {
-    cout << size_table[n] << ' ';
-    n = n - size_table[n];
+    std::cout << "A" << i;
   }
 
-  //print out sentinel value to note end
-  cout << "-1" << '\n';
-}  //printCutRodSolution()
-
-
-void extendedBottomUpCutRod(int32_t* price_table, int32_t* revenue_table,
-                            int32_t* size_table, const int32_t length)
-{
-  int32_t i;
-  int32_t j;
-  int32_t q;  //temp max revenue
-
-  //set revenue for length of 0
-  revenue_table[0] = 0;
-
-  //for length of rod, determine the first cut and revenue
-  for (j = 1; j <= length; j++)
+  else
   {
-    //set or reset q to sentinel value
-    q = INT32_MIN;
-
-    //for each piece up to current length
-    for (i = 1; i <= j; i++)
-    {
-      //set q based on stored values in revenue table and update size table
-      if (q < price_table[i] + revenue_table[j - i])
-      {
-        q = price_table[i] + revenue_table[j - i];
-        size_table[j] = i;
-      }  //if entered, stored values were updated
-    }  //after for loop, all the values for up to this length are updated
-
-    //update the revenue table with the new max revenue
-    revenue_table[j] = q;
-  } //after for loop, optimal revenue and sizes are stored in their tables
-}  //extendedBottomUpCutRod()
+    std::cout << "(";
+    printOptimalParens(s, i, s[i][j]);
+    printOptimalParens(s, s[i][j] + 1, j);
+    std::cout << ")";
+  }
+}  //printCutRodSolution()
 
 
 int main(int argc, char* argv[])
 {
-  int32_t length;
-  int32_t i;
-  int32_t* price_table;
-  int32_t* revenue_table;
-  int32_t* size_table;
+  int32_t n;
+  int32_t j;
+  int32_t q;
+  int32_t** m;
+  int32_t** s;
+  int32_t* p;
 
-  //first cin is the length of the arrays
-  cin >> length;
-  price_table = new int32_t [length + 1];
-  revenue_table = new int32_t [length + 1];
-  size_table = new int32_t [length + 1];
 
-  //load the unsorted array from input
-  for (i = 1; i <= length; i++)
-    cin >> price_table[i];
+  //first cin is the amount of matrix and dimensions
+  cin >> n;
+  p = new int32_t [n + 1];
+  for (int32_t i = 0; i <= n; i++)
+    cin >> p[i];
 
-  extendedBottomUpCutRod(price_table, revenue_table, size_table, length);
+  n--;
 
-  printCutRodSolution(revenue_table, size_table, length);
+  m = new int32_t* [n + 1];
+  for (int32_t i = 0; i <= n; i++)
+  {
+    m[i] = new int32_t [n + 1];
+    for (int32_t r = 0; r <= n; r++)
+      m[i][r] = 0;
+  }
 
-  //free allocated space
-  delete[] price_table;
-  delete[] revenue_table;
-  delete[] size_table;
+  s = new int32_t* [n];
+  for (int32_t i = 0; i <= n-1; i++)
+  {
+    s[i] = new int32_t [n + 1];
+    for (int32_t r = 0; r <= n; r++)
+      s[i][r] = 0;
+  }
+
+  for (int32_t i = 1; i <= n; i++)
+    m[i][i] = 0;
+
+  for (int32_t l = 2; l <= n; l++)
+  {
+    for (int32_t i = 1; i <= (n - l + 1); i++)
+    {
+      j = i + l - 1;
+      m[i][j] = INT32_MAX;
+      for (int32_t k = i; k <= (j - 1); k++)
+      {
+        q = m[i][k] + m[k+1][j] + (p[i-1]*p[k]*p[j]);
+        if (q < m[i][j])
+        {
+          m[i][j] = q;
+          s[i][j] = k;
+        }
+      }
+    }
+  }
+
+  std::cout << m[1][n] << '\n';
+
+  printOptimalParens(s, 1, n);
+
+  std::cout << "NO SEGFAULT" << '\n';
 
   return 0;
 }  //main()
