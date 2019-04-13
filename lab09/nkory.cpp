@@ -14,46 +14,61 @@ class Node {
     Node() {}
     Node(Node* leftNode, Node* rightNode, int charFreq, char character)
       : left (leftNode), right (rightNode), freq (charFreq), c (character) {}
+    Node& operator= (const Node &n) {
+      left = n.left;
+      right = n.right;
+      freq = n.freq;
+      c = n.c;
+    }
 };
 
-bool operator<(const Node& lhs, const Node& rhs) {
-  return lhs.freq < rhs.freq;
+
+struct NodeComparator {
+   bool operator() (const Node* lhs, const Node* rhs) const {
+     return lhs->freq > rhs->freq;
+   }
+};
+
+
+void inorderTreeWalk(Node* node) {
+  if (node->left != NULL)
+    inorderTreeWalk(node->left);
+
+  cout << node->c << ":" << node->freq << '\n';
+
+  if (node->right != NULL)
+    inorderTreeWalk(node->right);
 }
 
-bool operator>(const Node& lhs, const Node& rhs) {
-  return lhs.freq > rhs.freq;
-}
-
-bool operator==(const Node& lhs, const Node& rhs) {
-  return lhs.freq == rhs.freq;
-}
-
-bool operator!=(const Node& lhs, const Node& rhs) {
-  return lhs.freq != rhs.freq;
-}
 
 
 int main(int argc, char* argv[])
 {
-  priority_queue<Node, vector<Node>, greater<vector<Node>::value_type>> queue;
+  priority_queue<Node*, vector<Node*>, NodeComparator> queue;
+  char c;
+  int c_freq;
+  int i;
+  int n = 6;
+  Node* z;
 
-  Node n1;
-  Node n2;
-  Node n3;
+  for (i = 1, c = 'A'; i <= n; i++, c++) {
+    cin >> c_freq;
+    z = new Node(NULL, NULL, c_freq, c);
+    queue.push( z );
+  }
 
-  n1.freq = 1;
-  n2.freq = 2;
-  n3.freq = 3;
+  for (i = 1; i <= (n - 1); i++) {
+    z = new Node();
+    z->left = queue.top();
+    queue.pop();
+    z->right = queue.top();
+    queue.pop();
+    z->freq = z->left->freq + z->right->freq;
+    queue.push( z );
+  }
 
-  if (n1 < n2)
-    std::cout << "Works" << '\n';
-
-  queue.push(n3);
-  queue.push(n1);
-  queue.push(n2);
-
-  cout << queue.top().freq << '\n';
-
+  z = queue.top();
+  inorderTreeWalk(z);
 
   return 0;
 }  //main()
