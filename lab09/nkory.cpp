@@ -76,6 +76,7 @@ int main(int argc, char* argv[])
     queue.push(z);
   }  //char nodes are organized in the priority_queue
 
+  //huffman algorithm
   for (i = 1; i <= (n - 1); i++)
   {
     z = new Node();
@@ -88,15 +89,18 @@ int main(int argc, char* argv[])
 
     z->freq = z->left->freq + z->right->freq;
     queue.push(z);
-  }
+  }  //z is ready to be encoded
 
+  //pop last node from queue and load huffman codes into cipher
   z = queue.top();
   queue.pop();
   z->encode("", cipher);
 
+  //stdout the huffman codes
   for (i = 0, c = 'A'; i < n; i++, c++)
     cout << c << ":" << cipher[i] << '\n';
 
+  //free allocated memory
   z->cleanTree();
   delete z;
   delete [] cipher;
