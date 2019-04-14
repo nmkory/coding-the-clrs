@@ -2,6 +2,7 @@
 // CSE 100 Spring Semester 2019
 #include <iostream>
 #include <queue>
+#include <string>
 
 using namespace std;
 
@@ -30,16 +31,32 @@ struct NodeComparator {
 };
 
 
-void inorderTreeWalk(Node* node) {
+void inorderTreeWalk(Node* node, string huffman_code) {
   if (node->left != NULL)
-    inorderTreeWalk(node->left);
+    inorderTreeWalk(node->left, huffman_code + "0");
 
-  cout << node->c << ":" << node->freq << '\n';
+  if (node->c != '#')
+     std::cout << node->c << ":" << huffman_code <<'\n';
 
   if (node->right != NULL)
-    inorderTreeWalk(node->right);
+    inorderTreeWalk(node->right, huffman_code + "1");
 }
 
+
+void cleanTree(Node* node)
+{
+  if (node->left)
+  {
+    cleanTree(node->left);
+    delete node->left;
+  } // if node left
+
+  if (node->right)
+  {
+    cleanTree(node->right);
+    delete node->right;
+  } // if node right
+} //clean()
 
 
 int main(int argc, char* argv[])
@@ -68,7 +85,10 @@ int main(int argc, char* argv[])
   }
 
   z = queue.top();
-  inorderTreeWalk(z);
+  inorderTreeWalk(z, "");
+
+  cleanTree(z);
+  delete z;
 
   return 0;
 }  //main()
