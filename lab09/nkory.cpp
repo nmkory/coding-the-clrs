@@ -12,56 +12,58 @@ class Node {
     Node* right{NULL};
     int freq{0};
     char c{'#'};
+
     Node() {}
     Node(Node* leftNode, Node* rightNode, int charFreq, char character)
       : left (leftNode), right (rightNode), freq (charFreq), c (character) {}
+    ~Node() {}
+
+
     Node& operator= (const Node &n) {
       left = n.left;
       right = n.right;
       freq = n.freq;
       c = n.c;
-    }
+    }  //operator=
+
+
+    bool operator() (const Node* lhs, const Node* rhs) const {
+      return lhs->freq > rhs->freq;
+    }  //operator()
+
+
+    void encode(string huffman_code) {
+      if (left != NULL)
+        left->encode(huffman_code + "0");
+
+      if (c != '#')
+         std::cout << c << ":" << huffman_code <<'\n';
+
+      if (right != NULL)
+        right->encode(huffman_code + "1");
+    }  //encode()
+
+
+    void cleanTree()
+    {
+      if (left)
+      {
+        left->cleanTree();
+        delete left;
+      } // if node left
+
+      if (right)
+      {
+        right->cleanTree();
+        delete right;
+      } // if node right
+    } //cleanTree()
 };
-
-
-struct NodeComparator {
-   bool operator() (const Node* lhs, const Node* rhs) const {
-     return lhs->freq > rhs->freq;
-   }
-};
-
-
-void inorderTreeWalk(Node* node, string huffman_code) {
-  if (node->left != NULL)
-    inorderTreeWalk(node->left, huffman_code + "0");
-
-  if (node->c != '#')
-     std::cout << node->c << ":" << huffman_code <<'\n';
-
-  if (node->right != NULL)
-    inorderTreeWalk(node->right, huffman_code + "1");
-}
-
-
-void cleanTree(Node* node)
-{
-  if (node->left)
-  {
-    cleanTree(node->left);
-    delete node->left;
-  } // if node left
-
-  if (node->right)
-  {
-    cleanTree(node->right);
-    delete node->right;
-  } // if node right
-} //clean()
 
 
 int main(int argc, char* argv[])
 {
-  priority_queue<Node*, vector<Node*>, NodeComparator> queue;
+  priority_queue<Node*, vector<Node*>, Node> queue;
   char c;
   int c_freq;
   int i;
@@ -71,7 +73,7 @@ int main(int argc, char* argv[])
   for (i = 1, c = 'A'; i <= n; i++, c++) {
     cin >> c_freq;
     z = new Node(NULL, NULL, c_freq, c);
-    queue.push( z );
+    queue.push(z);
   }
 
   for (i = 1; i <= (n - 1); i++) {
@@ -81,13 +83,14 @@ int main(int argc, char* argv[])
     z->right = queue.top();
     queue.pop();
     z->freq = z->left->freq + z->right->freq;
-    queue.push( z );
+    queue.push(z);
   }
 
   z = queue.top();
-  inorderTreeWalk(z, "");
+  queue.pop();
+  z->encode("");
 
-  cleanTree(z);
+  z->cleanTree();
   delete z;
 
   return 0;
