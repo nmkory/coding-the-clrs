@@ -19,28 +19,20 @@ class Node {
     ~Node() {}
 
 
-    Node& operator= (const Node &n) {
-      left = n.left;
-      right = n.right;
-      freq = n.freq;
-      c = n.c;
-    }  //operator=
-
-
     bool operator() (const Node* lhs, const Node* rhs) const {
       return lhs->freq > rhs->freq;
     }  //operator()
 
 
-    void encode(string huffman_code) {
+    void encode(string huffman_code, string* cipher) {
       if (left != NULL)
-        left->encode(huffman_code + "0");
+        left->encode(huffman_code + "0", cipher);
 
       if (c != '#')
-         std::cout << c << ":" << huffman_code <<'\n';
+         cipher[c - 65] = huffman_code;
 
       if (right != NULL)
-        right->encode(huffman_code + "1");
+        right->encode(huffman_code + "1", cipher);
     }  //encode()
 
 
@@ -58,17 +50,18 @@ class Node {
         delete right;
       } // if node right
     } //cleanTree()
-};
+};  //class Node
 
 
 int main(int argc, char* argv[])
 {
-  priority_queue<Node*, vector<Node*>, Node> queue;
   char c;
   int c_freq;
   int i;
   int n = 6;
   Node* z;
+  string* cipher = new string[n];
+  priority_queue<Node*, vector<Node*>, Node> queue;
 
   for (i = 1, c = 'A'; i <= n; i++, c++) {
     cin >> c_freq;
@@ -88,10 +81,15 @@ int main(int argc, char* argv[])
 
   z = queue.top();
   queue.pop();
-  z->encode("");
+  z->encode("", cipher);
+
+  for (i = 0, c = 'A'; i < n; i++, c++) {
+    std::cout << c << ":" << cipher[i] << '\n';
+  }
 
   z->cleanTree();
   delete z;
+  delete [] cipher;
 
   return 0;
 }  //main()
