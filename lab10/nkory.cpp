@@ -86,8 +86,6 @@ class BST {
 
       if (v != NULL)
         v->parent = u->parent;
-
-      // delete u;
     }  //transplant()
 
 
