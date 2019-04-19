@@ -87,7 +87,7 @@ class BST {
       if (v != NULL)
         v->parent = u->parent;
 
-      //delete u;
+      // delete u;
     }  //transplant()
 
 
@@ -119,6 +119,19 @@ class BST {
     }  //treeInsert()
 
 
+    Node* treeSearch(Node* x, int k)
+    {
+      if (x == NULL || k == x->key)
+        return x;
+
+      if (k < x->key)
+        return treeSearch(x->left, k);
+
+      else
+        return treeSearch(x->right, k);
+    }
+
+
     void treeDelete(Node* z)
     {
       Node* y;
@@ -140,6 +153,8 @@ class BST {
         y->left = z->left;
         y->left->parent = y;
       }
+
+      delete z;
     }
 
 
@@ -199,7 +214,7 @@ int main(int argc, char* argv[])
         break;
       case 'd':
         cin >> key;
-        z = new Node (NULL, NULL, NULL, key);
+        z = tree->treeSearch(tree->root, key);
         tree->treeDelete(z);
         break;
       case 'o':
