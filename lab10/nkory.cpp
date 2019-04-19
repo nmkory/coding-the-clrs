@@ -197,50 +197,51 @@ int main(int argc, char* argv[])
   char command;
   int key;
   string walk;
-  string pre = "pre";
-  string post = "post";
-  bool incoming_input = true;
   Node* z;
   BST* tree = new BST();
+  bool incoming_input = true;
 
   //while there is still input commands
   while (incoming_input) {
     cin >> command;
-    switch (command) {
+    switch (command)
+    {
       case 'i':
         cin >> key;
         z = new Node (NULL, NULL, NULL, key);
         tree->treeInsert(z);
         break;
+
       case 'd':
         cin >> key;
         z = tree->treeSearch(tree->root, key);
         tree->treeDelete(z);
         break;
+
       case 'o':
         cin >> walk;
         //std::cout << walk << '\n';
-        if (walk.compare(pre) == 0)
+        if (walk == "pre")
         {
           tree->preorderTreeWalk(tree->root);
           walk.clear();
           break;
         }
-        else if (walk.compare(post) == 0)
+        else if (walk == "post")
         {
           tree->postorderTreeWalk(tree->root);
-          walk.clear();
           break;
         }
         else
         {
           tree->inorderTreeWalk(tree->root);
-          walk.clear();
           break;
         }
+
       case 'e' :
         incoming_input = false;
         break;
+        
       default :
         incoming_input = false;
     }  //end of switch
