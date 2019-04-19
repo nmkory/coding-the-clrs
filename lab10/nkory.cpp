@@ -20,16 +20,30 @@ class Node {
     ~Node() {}
 
 
+    //overloaded== operator
+    bool operator== (const Node* rhs) const
+    {
+      return key == rhs->key;
+    }  //operator==
+
+
+    //overloaded!= operator
+    bool operator!= (const Node* rhs) const
+    {
+      return key != rhs->key;
+    }  //operator!=
+
+
     //clean tree used to free leaked memory from Node allocations
     void cleanTree()
     {
-      if (left)
+      if (left != NULL)
       {
         left->cleanTree();
         delete left;
       } //if node left
 
-      if (right)
+      if (right != NULL)
       {
         right->cleanTree();
         delete right;
@@ -45,8 +59,19 @@ class BST {
     BST() {}
     BST(Node* root) : root (root) {}
     ~BST() {
+      if (root)
+      {
       root->cleanTree();
       delete root;
+      }
+    }
+
+
+    Node* treeMinimum(Node* x)
+    {
+      while (x->left != NULL)
+        x = x->left;
+      return x;
     }
 
 
@@ -61,6 +86,8 @@ class BST {
 
       if (v != NULL)
         v->parent = u->parent;
+
+      //delete u;
     }  //transplant()
 
 
@@ -90,6 +117,63 @@ class BST {
       else
         y->right = z;
     }  //treeInsert()
+
+
+    void treeDelete(Node* z)
+    {
+      Node* y;
+
+      if (z->left == NULL)
+        transplant(z, z->right);
+      else if (z->right == NULL)
+        transplant(z, z->left);
+      else
+      {
+        y = treeMinimum(z->right);
+        if (y->parent != z)
+        {
+          transplant(y, y->right);
+          y->right = z->right;
+          y->right->parent = y;
+        }
+        transplant(z, y);
+        y->left = z->left;
+        y->left->parent = y;
+      }
+    }
+
+
+    void preorderTreeWalk (Node* x)
+    {
+      if (x != NULL)
+      {
+        std::cout << x->key << '\n';
+        preorderTreeWalk (x->left);
+        preorderTreeWalk (x->right);
+      }
+    }
+
+
+    void postorderTreeWalk (Node* x)
+    {
+      if (x != NULL)
+      {
+        postorderTreeWalk (x->left);
+        postorderTreeWalk (x->right);
+        std::cout << x->key << '\n';
+      }
+    }
+
+
+    void inorderTreeWalk (Node* x)
+    {
+      if (x != NULL)
+      {
+        inorderTreeWalk (x->left);
+        std::cout << x->key << '\n';
+        inorderTreeWalk (x->right);
+      }
+    }
 };  //class BST
 
 
@@ -98,6 +182,8 @@ int main(int argc, char* argv[])
   char command;
   int key;
   string walk;
+  string pre = "pre";
+  string post = "post";
   bool incoming_input = true;
   Node* z;
   BST* tree = new BST();
@@ -112,15 +198,31 @@ int main(int argc, char* argv[])
         tree->treeInsert(z);
         break;
       case 'd':
+        cin >> key;
+        z = new Node (NULL, NULL, NULL, key);
+        tree->treeDelete(z);
         break;
       case 'o':
         cin >> walk;
-        if (walk == "pre")
+        //std::cout << walk << '\n';
+        if (walk.compare(pre) == 0)
+        {
+          tree->preorderTreeWalk(tree->root);
+          walk.clear();
           break;
-        else if (walk == "post")
+        }
+        else if (walk.compare(post) == 0)
+        {
+          tree->postorderTreeWalk(tree->root);
+          walk.clear();
           break;
+        }
         else
+        {
+          tree->inorderTreeWalk(tree->root);
+          walk.clear();
           break;
+        }
       case 'e' :
         incoming_input = false;
         break;
