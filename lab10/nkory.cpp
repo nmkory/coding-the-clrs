@@ -45,6 +45,21 @@ class BST {
     BST() {}
     BST(Node* root) : root (root) {}
 
+
+    void transplant(Node* u, Node* v)
+    {
+      if (u->parent == NULL)
+        root = v;
+      else if (u == u->parent->left)
+        u->parent->left = v;
+      else
+        u->parent->right = v;
+
+      if (v != NULL)
+        v->parent = u->parent;
+    }  //transplant()
+
+
     void treeInsert(Node* z)
     {
       Node* y = NULL;
@@ -70,10 +85,8 @@ class BST {
 
       else
         y->right = z;
-    }
-
-
-};
+    }  //treeInsert()
+};  //class BST
 
 
 int main(int argc, char* argv[])
@@ -110,7 +123,7 @@ int main(int argc, char* argv[])
       default :
         incoming_input = false;
     }  //end of switch
-  }  //after while loop, we have finished with this hash table
+  }  //after while loop, we have finished with input
 
   return 0;
 }  //main()
