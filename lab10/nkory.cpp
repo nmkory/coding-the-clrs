@@ -44,6 +44,10 @@ class BST {
 
     BST() {}
     BST(Node* root) : root (root) {}
+    ~BST() {
+      root->cleanTree();
+      delete root;
+    }
 
 
     void transplant(Node* u, Node* v)
@@ -124,6 +128,9 @@ int main(int argc, char* argv[])
         incoming_input = false;
     }  //end of switch
   }  //after while loop, we have finished with input
+
+  //free allocated space
+  delete tree;
 
   return 0;
 }  //main()
