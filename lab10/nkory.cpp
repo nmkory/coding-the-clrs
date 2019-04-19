@@ -162,7 +162,7 @@ class BST {
     {
       if (x != NULL)
       {
-        std::cout << x->key << '\n';
+        cout << x->key << '\n';
         preorderTreeWalk (x->left);
         preorderTreeWalk (x->right);
       }
@@ -175,7 +175,7 @@ class BST {
       {
         postorderTreeWalk (x->left);
         postorderTreeWalk (x->right);
-        std::cout << x->key << '\n';
+        cout << x->key << '\n';
       }
     }
 
@@ -185,7 +185,7 @@ class BST {
       if (x != NULL)
       {
         inorderTreeWalk (x->left);
-        std::cout << x->key << '\n';
+        cout << x->key << '\n';
         inorderTreeWalk (x->right);
       }
     }
@@ -220,7 +220,7 @@ int main(int argc, char* argv[])
 
       case 'o':
         cin >> walk;
-        //std::cout << walk << '\n';
+        //cout << walk << '\n';
         if (walk == "pre")
         {
           tree->preorderTreeWalk(tree->root);
@@ -241,7 +241,7 @@ int main(int argc, char* argv[])
       case 'e' :
         incoming_input = false;
         break;
-        
+
       default :
         incoming_input = false;
     }  //end of switch
