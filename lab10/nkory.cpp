@@ -80,6 +80,7 @@ int main(int argc, char* argv[])
 {
   char command;
   int key;
+  string walk;
   bool incoming_input = true;
   Node* z;
   BST* tree = new BST();
@@ -93,6 +94,16 @@ int main(int argc, char* argv[])
         z = new Node (NULL, NULL, NULL, key);
         tree->treeInsert(z);
         break;
+      case 'd':
+        break;
+      case 'o':
+        cin >> walk;
+        if (walk == "pre")
+          break;
+        else if (walk == "post")
+          break;
+        else
+          break;
       case 'e' :
         incoming_input = false;
         break;
