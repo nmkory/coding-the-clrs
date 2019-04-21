@@ -218,11 +218,9 @@ int main(int argc, char* argv[])
 
       case 'o':
         cin >> walk;
-        //cout << walk << '\n';
         if (walk == "pre")
         {
           tree->preorderTreeWalk(tree->root);
-          walk.clear();
           break;
         }
         else if (walk == "post")
