@@ -253,7 +253,7 @@ int main(int argc, char* argv[])
       case 'd':
         cin >> key;
         z = tree->treeSearch(key);
-        if (z != NULL)
+        if (z != NULL) //if z is null, we did not find that node so do nothing
           tree->treeDelete(z);
         break;
 
