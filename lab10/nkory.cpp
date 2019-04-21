@@ -34,6 +34,22 @@ class Node {
     }  //operator!=
 
 
+    Node* nodeSearch(int k)
+    {
+      if (k == key)
+        return this;
+
+      if (left != NULL && k < key)
+        return left->nodeSearch(k);
+
+      else if (right != NULL && k > key)
+        return right->nodeSearch(k);
+
+      else
+        return NULL;
+    }
+
+
     //clean tree used to free leaked memory from Node allocations
     void cleanTree()
     {
@@ -117,16 +133,12 @@ class BST {
     }  //treeInsert()
 
 
-    Node* treeSearch(Node* x, int k)
+    Node* treeSearch(int k)
     {
-      if (x == NULL || k == x->key)
-        return x;
+      if (root == NULL)
+        return NULL;
 
-      if (k < x->key)
-        return treeSearch(x->left, k);
-
-      else
-        return treeSearch(x->right, k);
+      return root->nodeSearch(k);
     }
 
 
@@ -192,7 +204,7 @@ class BST {
 
 int main(int argc, char* argv[])
 {
-  char command;
+  char command = ' ';
   int key;
   string walk;
   Node* z;
@@ -212,8 +224,9 @@ int main(int argc, char* argv[])
 
       case 'd':
         cin >> key;
-        z = tree->treeSearch(tree->root, key);
-        tree->treeDelete(z);
+        z = tree->treeSearch(key);
+        if (z != NULL)
+          tree->treeDelete(z);
         break;
 
       case 'o':
