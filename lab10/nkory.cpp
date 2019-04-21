@@ -128,8 +128,10 @@ class BST {
     }  //treeMinimum()
 
 
+    //replaces one subtree as a child of its parent with another subtree
     void transplant(Node* u, Node* v)
     {
+      //if root
       if (u->parent == NULL)
         root = v;
 
@@ -139,7 +141,7 @@ class BST {
       else
         u->parent->right = v;
 
-      if (v != NULL)
+      if (v != NULL)  //then update
         v->parent = u->parent;
     }  //transplant()
 
@@ -187,17 +189,26 @@ class BST {
 
       if (z->left == NULL)
         transplant(z, z->right);
+
       else if (z->right == NULL)
         transplant(z, z->left);
-      else
+
+      else  //else we need to find the successor
       {
         y = treeMinimum(z->right);
+
+
+         //if y is not z's left child, replace y as a child of its parent by y’s
+         //right child and turn z’s right child into y’s right child.
         if (y->parent != z)
         {
           transplant(y, y->right);
           y->right = z->right;
           y->right->parent = y;
-        }
+        }  //replaced y as a child of its parent
+
+        //replace z as a child of its parent by y and replace y's left child
+        //by z's left child
         transplant(z, y);
         y->left = z->left;
         y->left->parent = y;
