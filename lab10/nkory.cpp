@@ -272,7 +272,7 @@ int main(int argc, char* argv[])
           break;
         }
 
-        else
+        else  //else this is an inorder walk
         {
           tree->inorderTreeWalk();
           break;
