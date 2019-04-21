@@ -20,21 +20,22 @@ class Node {
     ~Node() {}
 
 
-    //overloaded== operator
+    //overloaded== operator for node comparisons
     bool operator== (const Node* rhs) const
     {
       return key == rhs->key;
     }  //operator==
 
 
-    //overloaded!= operator
+    //overloaded!= operator for node comparisons
     bool operator!= (const Node* rhs) const
     {
       return key != rhs->key;
     }  //operator!=
 
 
-    Node* nodeSearch(int k)
+    //search function for a node to find a value (null check before calling)
+    Node* const nodeSearch(int k)
     {
       if (k == key)
         return this;
@@ -45,12 +46,12 @@ class Node {
       else if (right != NULL && k > key)
         return right->nodeSearch(k);
 
-      else
+      else  //not found
         return NULL;
-    }
+    }  //nodeSearch()
 
 
-    void preorderWalk()
+    void preorderWalk() const
     {
       cout << key << '\n';
 
@@ -62,7 +63,7 @@ class Node {
     }
 
 
-    void postorderWalk()
+    void postorderWalk() const
     {
       if (left != NULL)
         left->postorderWalk();
@@ -74,7 +75,7 @@ class Node {
     }
 
 
-    void inorderWalk()
+    void inorderWalk() const
     {
       if (left != NULL)
         left->inorderWalk();
@@ -119,7 +120,7 @@ class BST {
     }
 
 
-    Node* treeMinimum(Node* x)
+    Node* const treeMinimum(Node* x) const
     {
       while (x->left != NULL)
         x = x->left;
@@ -169,7 +170,7 @@ class BST {
     }  //treeInsert()
 
 
-    Node* treeSearch(int k)
+    Node* const treeSearch(int k) const
     {
       if (root == NULL)
         return NULL;
@@ -204,21 +205,21 @@ class BST {
     }
 
 
-    void preorderTreeWalk ()
+    void preorderTreeWalk () const
     {
       if (root != NULL)
         root->preorderWalk();
     }
 
 
-    void postorderTreeWalk ()
+    void postorderTreeWalk () const
     {
       if (root != NULL)
         root->postorderWalk();
     }
 
 
-    void inorderTreeWalk ()
+    void inorderTreeWalk () const
     {
       if (root != NULL)
         root->inorderWalk();
