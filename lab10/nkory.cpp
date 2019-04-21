@@ -50,6 +50,42 @@ class Node {
     }
 
 
+    void preorderWalk()
+    {
+      cout << key << '\n';
+
+      if (left != NULL)
+        left->preorderWalk();
+
+      if (right != NULL)
+        right->preorderWalk();
+    }
+
+
+    void postorderWalk()
+    {
+      if (left != NULL)
+        left->postorderWalk();
+
+      if (right != NULL)
+        right->postorderWalk();
+
+      cout << key << '\n';
+    }
+
+
+    void inorderWalk()
+    {
+      if (left != NULL)
+        left->inorderWalk();
+
+      cout << key << '\n';
+
+      if (right != NULL)
+        right->inorderWalk();
+    }
+
+
     //clean tree used to free leaked memory from Node allocations
     void cleanTree()
     {
@@ -168,36 +204,24 @@ class BST {
     }
 
 
-    void preorderTreeWalk (Node* x)
+    void preorderTreeWalk ()
     {
-      if (x != NULL)
-      {
-        cout << x->key << '\n';
-        preorderTreeWalk (x->left);
-        preorderTreeWalk (x->right);
-      }
+      if (root != NULL)
+        root->preorderWalk();
     }
 
 
-    void postorderTreeWalk (Node* x)
+    void postorderTreeWalk ()
     {
-      if (x != NULL)
-      {
-        postorderTreeWalk (x->left);
-        postorderTreeWalk (x->right);
-        cout << x->key << '\n';
-      }
+      if (root != NULL)
+        root->postorderWalk();
     }
 
 
-    void inorderTreeWalk (Node* x)
+    void inorderTreeWalk ()
     {
-      if (x != NULL)
-      {
-        inorderTreeWalk (x->left);
-        cout << x->key << '\n';
-        inorderTreeWalk (x->right);
-      }
+      if (root != NULL)
+        root->inorderWalk();
     }
 };  //class BST
 
@@ -233,17 +257,17 @@ int main(int argc, char* argv[])
         cin >> walk;
         if (walk == "pre")
         {
-          tree->preorderTreeWalk(tree->root);
+          tree->preorderTreeWalk();
           break;
         }
         else if (walk == "post")
         {
-          tree->postorderTreeWalk(tree->root);
+          tree->postorderTreeWalk();
           break;
         }
         else
         {
-          tree->inorderTreeWalk(tree->root);
+          tree->inorderTreeWalk();
           break;
         }
 
