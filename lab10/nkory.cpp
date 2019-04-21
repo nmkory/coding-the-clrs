@@ -197,7 +197,6 @@ class BST {
       {
         y = treeMinimum(z->right);
 
-
          //if y is not z's left child, replace y as a child of its parent by y’s
          //right child and turn z’s right child into y’s right child.
         if (y->parent != z)
