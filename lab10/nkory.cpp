@@ -60,7 +60,7 @@ class Node {
 
       if (right != NULL)
         right->preorderWalk();
-    }
+    }  //preorderWalk()
 
 
     void postorderWalk() const
@@ -72,7 +72,7 @@ class Node {
         right->postorderWalk();
 
       cout << key << '\n';
-    }
+    }  //postorderWalk()
 
 
     void inorderWalk() const
@@ -84,7 +84,7 @@ class Node {
 
       if (right != NULL)
         right->inorderWalk();
-    }
+    }  //inorderWalk()
 
 
     //clean tree used to free leaked memory from Node allocations
@@ -111,13 +111,14 @@ class BST {
 
     BST() {}
     BST(Node* root) : root (root) {}
-    ~BST() {
+    ~BST()
+    {
       if (root)
       {
-      root->cleanTree();
-      delete root;
+      root->cleanTree();  //free all allocated memory
+      delete root;  // last node
       }
-    }
+    }  //~BST()
 
 
     Node* const treeMinimum(Node* x) const
@@ -125,15 +126,17 @@ class BST {
       while (x->left != NULL)
         x = x->left;
       return x;
-    }
+    }  //treeMinimum()
 
 
     void transplant(Node* u, Node* v)
     {
       if (u->parent == NULL)
         root = v;
+
       else if (u == u->parent->left)
         u->parent->left = v;
+
       else
         u->parent->right = v;
 
@@ -176,7 +179,7 @@ class BST {
         return NULL;
 
       return root->nodeSearch(k);
-    }
+    }  //treeSearch()
 
 
     void treeDelete(Node* z)
@@ -201,42 +204,43 @@ class BST {
         y->left->parent = y;
       }
 
+      //free allocated memory
       delete z;
-    }
+    }  //treeDelete()
 
 
-    void preorderTreeWalk () const
+    void preorderTreeWalk() const
     {
       if (root != NULL)
         root->preorderWalk();
-    }
+    }  //preorderTreeWalk()
 
 
-    void postorderTreeWalk () const
+    void postorderTreeWalk() const
     {
       if (root != NULL)
         root->postorderWalk();
-    }
+    }  //postorderTreeWalk()
 
 
-    void inorderTreeWalk () const
+    void inorderTreeWalk() const
     {
       if (root != NULL)
         root->inorderWalk();
-    }
+    }  //inorderTreeWalk()
 };  //class BST
 
 
 int main(int argc, char* argv[])
 {
-  char command = ' ';
+  char command = ' ';  //assign to appease valgrind
   int key;
   string walk;
   Node* z;
   BST* tree = new BST();
   bool incoming_input = true;
 
-  //while there is still input commands
+  //while there are still input commands
   while (incoming_input) {
     cin >> command;
     switch (command)
@@ -256,16 +260,19 @@ int main(int argc, char* argv[])
 
       case 'o':
         cin >> walk;
+
         if (walk == "pre")
         {
           tree->preorderTreeWalk();
           break;
         }
+
         else if (walk == "post")
         {
           tree->postorderTreeWalk();
           break;
         }
+
         else
         {
           tree->inorderTreeWalk();
