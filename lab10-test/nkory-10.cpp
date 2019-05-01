@@ -1,6 +1,7 @@
 // Author: Nicholas Kory, SID# 100319778, nkory@ucmerced.edu
 // CSE 100 Spring Semester 2019
 // I did not work with anyone on this assignment.
+//Test
 #include <iostream>
 #include <string>
 
